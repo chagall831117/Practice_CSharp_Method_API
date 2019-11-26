@@ -7,14 +7,28 @@ public class Fox : MonoBehaviour
     public Rigidbody2D Rig;
     //保存圖片渲染器SR預置物
     public SpriteRenderer Sr;
-    //推力
-    private float thrust = 1f;
-
     /// <summary>
     /// 移動方法
     /// </summary>
     private void Move()
     {
+        //去抓水平控制器
+        float speed = Input.GetAxisRaw("Horizontal") * Time.deltaTime;
+        //Rig預置物 AddForce 推力語法 Vector2 =方向  speed = 速度方向 
+        Rig.AddForce(new Vector2(1, 0) * speed * 60, ForceMode2D.Impulse);
+        if (speed < 0)
+        {
+            Sr.flipX = true;
+        }
+        else if (speed > 0)
+        {
+            Sr.flipX = false;
+        }
+        if (Input.GetKeyDown("w"))
+        {
+            print("w");
+            Rig.AddForce(new Vector2(0, 1) * 1200);
+        }
 
     }
 
@@ -25,18 +39,6 @@ public class Fox : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //去抓水平控制器
-        float speed = Input.GetAxisRaw("Horizontal") * Time.deltaTime;
-        //位置移動 原位置+=新位置
-        transform.position = transform.position + new Vector3(speed * 250 * Time.deltaTime,0,0);
-
-        //if (speed>0)
-        //{ 
-        //Rig.AddForce(transform.right * thrust, ForceMode2D.Impulse);
-        //}
-        //else if (speed < 0)
-        //{
-        //Rig.AddForce(transform.left * thrust, ForceMode2D.Impulse);
-        //}
+        Move();
     }
 }
